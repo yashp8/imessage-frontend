@@ -346,6 +346,13 @@
   dependencies:
     "@chakra-ui/shared-utils" "2.0.2"
 
+"@chakra-ui/icons@^2.0.11":
+  "integrity" "sha512-WjxrFMt9hHpuZlnBh4fhtGOkIVlwYwHNmwq4sJGxYWlg8UnEhVJMoOojheJDy/d3Gp9+ApetlK3vt8fV/rZamg=="
+  "resolved" "https://registry.npmjs.org/@chakra-ui/icons/-/icons-2.0.11.tgz"
+  "version" "2.0.11"
+  dependencies:
+    "@chakra-ui/icon" "3.0.11"
+
 "@chakra-ui/image@2.0.11":
   "integrity" "sha512-S6NqAprPcbHnck/J+2wg06r9SSol62v5A01O8Kke2PnAyjalMcS+6P59lDRO7wvPqsdxq4PPbSTZP6Dww2CvcA=="
   "resolved" "https://registry.npmjs.org/@chakra-ui/image/-/image-2.0.11.tgz"
@@ -4541,6 +4548,11 @@
   "version" "2.4.0"
   dependencies:
     "goober" "^2.1.10"
+
+"react-icons@^4.4.0":
+  "integrity" "sha512-fSbvHeVYo/B5/L4VhB7sBA1i2tS8MkT0Hb9t2H1AVPkwGfVHLJCqyr2Py9dKMxsyM63Eng1GkdZfbWj+Fmv8Rg=="
+  "resolved" "https://registry.npmjs.org/react-icons/-/react-icons-4.4.0.tgz"
+  "version" "4.4.0"
 
 "react-is@^16.13.1", "react-is@^16.7.0":
   "integrity" "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="

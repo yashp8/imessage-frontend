@@ -1,5 +1,4 @@
-import {arrow} from "@popperjs/core";
-
+// user
 export interface CreateUsernameData {
     createUsername: {
         success: Boolean,
@@ -22,4 +21,16 @@ export interface SearchUserData {
 export interface SearchUser {
     id: string,
     username: string
+}
+
+// conversation
+
+export interface CreateConversationData {
+    createConversation: {
+        conversationId: String;
+    }
+}
+
+export interface CreateConversationInput {
+    participantIds: Array<string>
 }
