@@ -28,6 +28,7 @@ import { tryCatch } from 'rxjs/internal-compatibility';
 import { AppError } from '../../../../util/appError';
 import CreateConversation from '../../../../graphql/operations/conversation';
 import { Session } from 'next-auth';
+import { useRouter } from 'next/router';
 
 interface IModelProps {
   session: Session;
@@ -43,10 +44,11 @@ const ConversationModel: React.FC<IModelProps> = ({
   const {
     user: { id: userId },
   } = session;
+
+  const router = useRouter();
+
   const [username, setUsername] = useState('');
-
   const [participants, setParticipant] = useState<Array<SearchUser>>([]);
-
   const [searchUsers, { data, error, loading }] = useLazyQuery<
     SearchUserData,
     SearchUserInput
@@ -77,6 +79,19 @@ const ConversationModel: React.FC<IModelProps> = ({
       const { data } = await createConversation({
         variables: { participantIds },
       });
+
+      if (!data?.createConversation) {
+        throw new Error('Failed to create conversation');
+      }
+
+      const { createConversation: { conversationId } } = data;
+
+      router.push({ query: { conversationId: `${conversationId}` } });
+
+      setParticipant([]);
+      setUsername('');
+      onClose();
+      console.log('HERE IS DATA', data);
     } catch (err: any) {
       new AppError(err?.message, 1);
     }

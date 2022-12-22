@@ -25,6 +25,10 @@ export interface SearchUser {
 
 // conversation
 
+export interface ConversationsData {
+    conversations: Array<any>
+}
+
 export interface CreateConversationData {
     createConversation: {
         conversationId: String;
