@@ -9,6 +9,7 @@ import MessageOprations from '../../../../graphql/operations/messages';
 import { AppError } from '../../../../util/appError';
 import SkeletonLoader from '../../../common/SkeletonLoader';
 import { useEffect } from 'react';
+import MessageItem from './MessageItem';
 
 interface MessagesProps {
   userId: string;
@@ -37,7 +38,7 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
     subscribeToMore({
       document: MessageOprations.Subscriptions.messageSent,
       variables: {
-        conversationId
+        conversationId,
       },
       updateQuery: (prev, { subscriptionData }: MessageSubscriptionData) => {
         if (!subscriptionData) {
@@ -54,8 +55,8 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
   };
 
   useEffect(() => {
-    subscribeToMoreMessage(conversationId)
-  },[conversationId])
+    subscribeToMoreMessage(conversationId);
+  }, [conversationId]);
 
   return (
     <Flex direction='column' justify='flex-end' overflow='hidden'>
@@ -67,8 +68,12 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
       {data?.messages && (
         <Flex direction='column-reverse' overflowY='scroll' height='100%'>
           {data.messages.map((message) => (
-            // <MessageItem />
-            <div key={message.body}>{message.body}</div>
+            <MessageItem
+              key={message}
+              message={message}
+              sentByMe={message.sender.id === userId}
+            />
+            // <div key={message.body}>{message.body}</div>
           ))}
         </Flex>
       )}
