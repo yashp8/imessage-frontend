@@ -6,7 +6,7 @@ import { AppError } from '../../../../util/appError';
 import { useMutation } from '@apollo/client';
 import { ObjectID } from 'bson';
 import MessageOperations from '../../../../graphql/operations/messages';
-import { SendMessageArguments } from '../../../../util/types';
+import { MessagesData, SendMessageArguments } from '../../../../util/types';
 
 interface MessageInputProp {
   session: Session;
@@ -28,7 +28,7 @@ const MessageInput: React.FC<MessageInputProp> = ({
     event.preventDefault();
 
     try {
-      // call send message
+      // call sendMessage mutation
       const { id: senderId } = session.user;
       const messageId = new ObjectID().toString();
       const newMessage: SendMessageArguments = {
@@ -38,9 +38,44 @@ const MessageInput: React.FC<MessageInputProp> = ({
         body: messageBody,
       };
 
+      // Clear input state
+      setMessageBody('');
+
       const { data, errors } = await sendMessage({
         variables: {
           ...newMessage,
+        },
+        optimisticResponse: {
+          sendMessage: true,
+        },
+        update: (cache) => {
+          const existing = cache.readQuery<MessagesData>({
+            query: MessageOperations.Query.messages,
+            variables: { conversationId },
+          }) as MessagesData;
+
+          cache.writeQuery<MessagesData, { conversationId: string }>({
+            query: MessageOperations.Query.messages,
+            variables: { conversationId },
+            data: {
+              ...existing,
+              messages: [
+                {
+                  id: messageId,
+                  body: messageBody,
+                  senderId: session.user.id,
+                  conversationId,
+                  sender: {
+                    id: session.user.id,
+                    username: session.user.username,
+                  },
+                  createdAt: new Date(Date.now()),
+                  updatedAt: new Date(Date.now()),
+                },
+                ...existing.messages,
+              ],
+            },
+          });
         },
       });
 
@@ -49,8 +84,7 @@ const MessageInput: React.FC<MessageInputProp> = ({
       }
     } catch (error: any) {
       console.log('onSendMessage error', error);
-      new AppError(error.message, 500);
-      // toast.error(error?.message)
+      toast.error(error?.message);
     }
   };
 

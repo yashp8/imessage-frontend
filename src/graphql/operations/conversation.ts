@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { MessageFields } from "./messages";
+import { MessageFields } from './messages';
 
 const ConversationFields = `
   id
@@ -35,6 +35,14 @@ export default {
         }
       }
     `,
+    markConversationAsRead: gql`
+      mutation MarkConversationAsRead(
+        $userId: String!
+        $conversationId: String!
+      ) {
+        markConversationAsRead(userId: $userId, conversationId: $conversationId)
+      }
+    `,
   },
   Subscriptions: {
     ConversationCreated: gql`
@@ -43,6 +51,15 @@ export default {
           ${ConversationFields}
         }
       }
+      `,
+    conversationUpdated: gql`
+        subscription ConversationUpdated {
+          conversationUpdated {
+            conversation {
+              ${ConversationFields}
+            }
+          }
+        }
       `,
   },
 };

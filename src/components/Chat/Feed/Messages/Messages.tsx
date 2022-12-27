@@ -30,10 +30,6 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
     //   onCompleted: () => {},
   });
 
-  if (error) {
-    return null;
-  }
-
   const subscribeToMoreMessage = (conversationId: string) => {
     subscribeToMore({
       document: MessageOprations.Subscriptions.messageSent,
@@ -48,7 +44,10 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
         const newMessage = subscriptionData.data.messageSent;
 
         return Object.assign({}, prev, {
-          messages: [newMessage, ...prev.messages],
+          messages:
+            newMessage.sender.id === userId
+              ? prev.messages
+              : [newMessage, ...prev.messages],
         });
       },
     });
@@ -57,6 +56,11 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
   useEffect(() => {
     subscribeToMoreMessage(conversationId);
   }, [conversationId]);
+
+
+  if (error) {
+    return null;
+  }
 
   return (
     <Flex direction='column' justify='flex-end' overflow='hidden'>
