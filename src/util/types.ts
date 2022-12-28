@@ -54,6 +54,12 @@ export interface ConversationUpdatedData {
   }
 }
 
+export interface ConversationDeletedData {
+  conversationDeleted: {
+    id: string;
+  }
+}
+
 // messages
 
 export interface SendMessageArguments {
@@ -61,6 +67,9 @@ export interface SendMessageArguments {
   conversationId: string;
   senderId: string;
   body: string;
+  conversation?: {
+    id: string
+  }
 }
 export interface MessagesData {
   messages: Array<any>;
@@ -83,4 +92,8 @@ export interface messagePopulated {
     id: any
     username: any,
   },
+  id?: string,
+  conversation: {
+    id: string
+  }
 }

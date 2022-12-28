@@ -1,15 +1,15 @@
-import { useQuery } from '@apollo/client';
-import { Flex, Stack } from '@chakra-ui/react';
+import { useQuery } from "@apollo/client";
+import { Box, Flex, Stack } from "@chakra-ui/react";
+import React, { useEffect, useRef } from "react";
+import toast from "react-hot-toast";
+import MessageOperations from "../../../../graphql/operations/messages";
 import {
-  MessageSubscriptionData,
   MessagesData,
+  MessageSubscriptionData,
   MessagesVariable,
-} from '../../../../util/types';
-import MessageOprations from '../../../../graphql/operations/messages';
-import { AppError } from '../../../../util/appError';
-import SkeletonLoader from '../../../common/SkeletonLoader';
-import { useEffect } from 'react';
-import MessageItem from './MessageItem';
+} from "../../../../util/types";
+import SkeletonLoader from "../../../common/SkeletonLoader";
+import MessageItem from "./MessageItem";
 
 interface MessagesProps {
   userId: string;
@@ -20,26 +20,25 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
   const { data, loading, error, subscribeToMore } = useQuery<
     MessagesData,
     MessagesVariable
-  >(MessageOprations.Query.messages, {
+  >(MessageOperations.Query.messages, {
     variables: {
       conversationId,
     },
     onError: ({ message }) => {
-      new AppError(message, 500);
+      toast.error(message);
     },
-    //   onCompleted: () => {},
   });
 
-  const subscribeToMoreMessage = (conversationId: string) => {
-    subscribeToMore({
-      document: MessageOprations.Subscriptions.messageSent,
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const subscribeToMoreMessages = (conversationId: string) => {
+    return subscribeToMore({
+      document: MessageOperations.Subscriptions.messageSent,
       variables: {
         conversationId,
       },
       updateQuery: (prev, { subscriptionData }: MessageSubscriptionData) => {
-        if (!subscriptionData) {
-          return prev;
-        }
+        if (!subscriptionData.data) return prev;
 
         const newMessage = subscriptionData.data.messageSent;
 
@@ -54,9 +53,15 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
   };
 
   useEffect(() => {
-    subscribeToMoreMessage(conversationId);
+    const unsubscribe = subscribeToMoreMessages(conversationId);
+
+    return () => unsubscribe();
   }, [conversationId]);
 
+  useEffect(() => {
+    if (!messagesEndRef.current || !data) return;
+    messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  }, [data, messagesEndRef.current]);
 
   if (error) {
     return null;
@@ -73,16 +78,14 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
         <Flex direction='column-reverse' overflowY='scroll' height='100%'>
           {data.messages.map((message) => (
             <MessageItem
-              key={message}
+              key={message.id}
               message={message}
               sentByMe={message.sender.id === userId}
             />
-            // <div key={message.body}>{message.body}</div>
           ))}
         </Flex>
       )}
     </Flex>
   );
 };
-
 export default Messages;

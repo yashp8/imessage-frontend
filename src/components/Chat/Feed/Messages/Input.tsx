@@ -54,6 +54,28 @@ const MessageInput: React.FC<MessageInputProp> = ({
             variables: { conversationId },
           }) as MessagesData;
 
+          // let mutatedMessages = [];
+
+          // const isExistMessage = existing.messages.find((e) => e.id === messageId);
+
+          // if(!isExistMessage) {
+          //   mutatedMessages = existing.messages
+          //   existing.messages.push({
+          //     id: messageId,
+          //     body: messageBody,
+          //     senderId: session.user.id,
+          //     conversationId,
+          //     sender: {
+          //       id: session.user.id,
+          //       username: session.user.username,
+          //     },
+          //     createdAt: new Date(Date.now()),
+          //     updatedAt: new Date(Date.now()),
+          //   })
+          // } else {
+          //   mutatedMessages = existing.messages
+          // }
+
           cache.writeQuery<MessagesData, { conversationId: string }>({
             query: MessageOperations.Query.messages,
             variables: { conversationId },
@@ -68,6 +90,9 @@ const MessageInput: React.FC<MessageInputProp> = ({
                   sender: {
                     id: session.user.id,
                     username: session.user.username,
+                  },
+                  conversation: {
+                    id: conversationId
                   },
                   createdAt: new Date(Date.now()),
                   updatedAt: new Date(Date.now()),
