@@ -24,6 +24,13 @@ export interface SearchUser {
 }
 
 // conversation
+
+export interface ConversationPopulated {
+  id: string,
+  participants: any,
+  latestMessage: any,
+}
+
 export interface ConversationsData {
   conversations: Array<any>;
 }
@@ -38,6 +45,21 @@ export interface CreateConversationInput {
   participantIds: Array<string>;
 }
 
+export interface ConversationUpdatedData {
+  conversationUpdated: {
+    // conversation: Omit<ConversationPopulated, 'latestMessage'> & {
+    //   latestMessage: any
+    // };
+    conversation: ConversationPopulated;
+  }
+}
+
+export interface ConversationDeletedData {
+  conversationDeleted: {
+    id: string;
+  }
+}
+
 // messages
 
 export interface SendMessageArguments {
@@ -45,6 +67,9 @@ export interface SendMessageArguments {
   conversationId: string;
   senderId: string;
   body: string;
+  conversation?: {
+    id: string
+  }
 }
 export interface MessagesData {
   messages: Array<any>;
@@ -63,6 +88,12 @@ export interface MessageSubscriptionData {
 }
 
 export interface messagePopulated {
-  id: boolean;
-  username: boolean;
+  sender: {
+    id: any
+    username: any,
+  },
+  id?: string,
+  conversation: {
+    id: string
+  }
 }

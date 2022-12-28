@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const MessageFields = `
   id
@@ -15,7 +15,16 @@ export default {
     messages: gql`
       query Messages($conversationId: String!) {
         messages(conversationId: $conversationId) {
-          ${MessageFields}
+          id
+          sender {
+            id
+            username
+          }
+          conversation {
+            id
+          }
+          body
+          createdAt
         }
       }
     `,
@@ -41,7 +50,16 @@ export default {
     messageSent: gql`
       subscription MessageSent($conversationId: String!) {
         messageSent(conversationId: $conversationId) {
-          ${MessageFields}
+          id
+          sender {
+            id
+            username
+          }
+          conversation {
+            id
+          }
+          body
+          createdAt
         }
       }
     `,
