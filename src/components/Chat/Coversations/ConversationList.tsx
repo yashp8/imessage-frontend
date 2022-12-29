@@ -69,7 +69,7 @@ const ConversationList: React.FunctionComponent<IConversationListProps> = ({
   );
 
   return (
-    <Box width='100%'>
+    <Box width='100%' position='relative' height='100%'>
       <Box
         py={2}
         px={4}
@@ -108,7 +108,12 @@ const ConversationList: React.FunctionComponent<IConversationListProps> = ({
           );
         })}
       <Box position='absolute' bottom={0} left={0} width='100%' px={8}>
-        <Button width='100%' onClick={() => {signOut()}}>
+        <Button
+          width='100%'
+          onClick={() => {
+            signOut();
+          }}
+        >
           Logout
         </Button>
       </Box>
