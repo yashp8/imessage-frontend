@@ -3,10 +3,10 @@ import GoogleProvider from "next-auth/providers/google"
 import FacebookProvider from "next-auth/providers/facebook";
 import TwitterProvider from 'next-auth/providers/twitter'
 import {PrismaAdapter} from "@next-auth/prisma-adapter"
-import {PrismaClient} from '@prisma/client'
-// import prisma from "../../../lib/prismadb"
+// import {PrismaClient} from '@prisma/client'
+import prisma from "../../../lib/prismadb"
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 export default NextAuth({
     adapter: PrismaAdapter(prisma),

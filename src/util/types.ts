@@ -47,11 +47,12 @@ export interface CreateConversationInput {
 
 export interface ConversationUpdatedData {
   conversationUpdated: {
-    // conversation: Omit<ConversationPopulated, 'latestMessage'> & {
-    //   latestMessage: any
-    // };
-    conversation: ConversationPopulated;
-  }
+    conversation: Omit<ConversationPopulated, "latestMessage"> & {
+      latestMessage: any;
+    };
+    addedUserIds: Array<string> | null;
+    removedUserIds: Array<string> | null;
+  };
 }
 
 export interface ConversationDeletedData {
